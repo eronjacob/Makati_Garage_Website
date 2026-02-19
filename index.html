@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makati Garage AutoShop</title>
+    <link rel="icon" type="images/jpg" href="./assets/images/makatigaragelogo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+
+    <!-- Add Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+</head>
+<body>
+    <div class="main-background" id="main-background">
+        <div class="slide active" style="background-image: url('./assets/images/backgrounds/backgroundpic1.jpg')"></div>
+        <div class="slide" style="background-image: url('./assets/images/backgrounds/backgroundpic3.png')"></div>
+        <div class="slide" style="background-image: url('./assets/images/backgrounds/backgroundpic.jpg')"></div>
+        <div class="slide" style="background-image: url('./assets/images/backgrounds/background4.png')"></div>
+        <div class="slide" style="background-image: url('./assets/images/backgrounds/background5.png')"></div>
+    </div>
+
+    <div class="threads-container" id="threads-background"></div>
+
+    <div class="auth-container" id="auth-container">
+        <div class="auth-box">
+            <h2>Welcome to Makati Garage</h2>
+            
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Login</div>
+                <div class="auth-tab" data-tab="register">Register</div>
+            </div>
+            
+            <div id="login-form" class="auth-form active">
+                <form id="loginForm">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required placeholder="Enter your email">
+                    
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required placeholder="Enter your password">
+                    
+                    <button type="submit">Login</button>
+                </form>
+                
+                <div id="loginConfirmation">
+                    <h3>Login Successful!</h3>
+                    <p>Welcome back! Redirecting to our services...</p>
+                </div>
+                
+                <div id="loginError">
+                    <h3>Login Failed</h3>
+                    <p id="loginErrorMessage">Invalid email or password. Please try again.</p>
+                </div>
+            </div>
+            
+            <div id="register-form" class="auth-form">
+                <form id="registerForm">
+                    <label for="reg-name">Full Name</label>
+                    <input type="text" id="reg-name" required placeholder="Your full name">
+                    
+                    <label for="reg-email">Email</label>
+                    <input type="email" id="reg-email" required placeholder="Your email">
+                    
+                    <label for="reg-phone">Phone Number</label>
+                    <input type="tel" id="reg-phone" required placeholder="Your phone number">
+                    
+                    <label for="reg-password">Password</label>
+                    <input type="password" id="reg-password" required placeholder="Choose a password (min 6 characters)">
+                    
+                    <label for="reg-confirm-password">Confirm Password</label>
+                    <input type="password" id="reg-confirm-password" required placeholder="Confirm your password">
+                    
+                    <button type="submit">Register</button>
+                </form>
+                
+                <div id="registerConfirmation">
+                    <h3>Registration Successful!</h3>
+                    <p>You can now login with your credentials.</p>
+                </div>
+                
+                <div id="registerError">
+                    <h3>Registration Error</h3>
+                    <p id="registerErrorMessage">Please check your inputs and try again.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-wrapper" id="content-wrapper">
+        <header>
+            <div class="logo-container">
+                <img src="./assets/images/makatigaragelogo.jpg" alt="Makati Garage Logo" class="logo">
+            </div>
+            <h1>Makati Garage</h1>
+            <h3>"DRIVEN BY TRUST. POWERED BY PRECISION"</h3>
+            <p>Book for your vehicle repairs at the best garage shop in Sitra, Bahrain</p>
+        </header>
+
+        <nav>
+            <a href="#" class="nav-link active" data-page="services">Our Services</a>
+            <a href="#" class="nav-link" data-page="booking">Book Service</a>
+            <a href="#" class="nav-link" data-page="my-bookings">My Bookings</a>
+            <a href="#" class="nav-link" data-page="contact">Contact Us</a>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </nav>
+
+        <main>
+            <div id="booking-page" class="page">
+                <div class="center-container">
+                    <section class="booking-section">
+                        <h2>Book Your Slot</h2>
+                        <form id="bookingForm">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" required placeholder="Your name">
+                            
+                            <label for="email">Email</label>
+                            <input type="email" id="email" required placeholder="Your email">
+                            
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" required placeholder="Your phone number">
+                            
+                            <label for="date">Booking Date</label>
+                            <input type="date" id="date" required>
+                            
+                            <label for="time-slot">Available Time Slots</label>
+                            <div class="time-slots" id="time-slots-container">
+                                <!-- Time slots will be generated here -->
+                            </div>
+                            <input type="hidden" id="selected-time" name="selected-time" required>
+                            
+                            <label for="service">Select Service</label>
+                            <select id="service" required>
+                                <option value="" disabled selected>Select a service</option>
+                                <option value="Oil Change">Oil Change</option>
+                                <option value="Tire Replacement">Tire Replacement</option>
+                                <option value="Engine Check">Engine Check</option>
+                                <option value="Car Wash">Car Wash</option>
+                                <option value="Full Service">Full Service</option>
+                                <option value="Brake Repair">Brake Repair</option>
+                            </select>
+                            
+                            <label for="notes">Special Instructions</label>
+                            <textarea id="notes" placeholder="Any special requests or notes about your vehicle"></textarea>
+                            
+                            <button type="submit">Book Now</button>
+                        </form>
+                        
+                        <div id="confirmation">
+                            <h3>Booking Confirmed!</h3>
+                            <p>Thank you for choosing Makati Garage. We'll contact you shortly to confirm your appointment.</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <div id="my-bookings-page" class="page">
+                <div class="center-container">
+                    <section class="my-bookings-section">
+                        <h2>My Booking History</h2>
+                        <div id="booking-records-container">
+                            <!-- Booking records will be loaded here -->
+                        </div>
+                        <div id="myBookingsMessage">
+                            <p>You have no past bookings. Book a service to see your history here!</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <div id="services-page" class="page active">
+                <div class="center-container">
+                    <section class="services-section">
+                        <h2>Our Services</h2>
+                        <div class="services-grid">
+                            <div class="service-card">
+                                <img src="./assets/images/services/oil-change.jpeg" alt="Oil Change" class="service-icon">
+                                <h3 class="service-title">Oil Change</h3>
+                                <p class="service-description">
+                                    Complete oil and filter replacement using premium synthetic or conventional oils. 
+                                    Includes fluid level checks and lubrication of chassis components.
+                                </p>
+                            </div>
+                            
+                            <div class="service-card">
+                                <img src="./assets/images/services/tire-change.jpeg" alt="Tire Service" class="service-icon">
+                                <h3 class="service-title">Tire Replacement</h3>
+                                <p class="service-description">
+                                    Professional tire mounting, balancing, and alignment. We carry all major brands 
+                                    and offer pressure monitoring system service.
+                                </p>
+                            </div>
+                            
+                            <div class="service-card">
+                                <img src="./assets/images/services/engine-check.webp" alt="Engine Diagnostic" class="service-icon">
+                                <h3 class="service-title">Engine Check</h3>
+                                <p class="service-description">
+                                    Comprehensive diagnostic scanning and tune-up services to optimize performance 
+                                    and fuel efficiency. Includes spark plug replacement and system analysis.
+                                </p>
+                            </div>
+                            
+                            <div class="service-card">
+                                <img src="./assets/images/services/car-filter.webp" alt="Car Filter" class="service-icon">
+                                <h3 class="service-title">Car Filter</h3>
+                                <p class="service-description">
+                                    inspecting, cleaning, or replacing filters such as the air filter, oil filter, fuel filter, 
+                                    and cabin filter to ensure optimal engine performance, fuel efficiency, 
+                                    and clean air circulation inside the vehicle.
+                                </p>
+                            </div>
+                            
+                            <div class="service-card">
+                                <img src="./assets/images/services/brake-repair.webp" alt="Brake Service" class="service-icon">
+                                <h3 class="service-title">Brake Repair</h3>
+                                <p class="service-description">
+                                    Complete brake inspection and service including pad replacement, 
+                                    rotor resurfacing, and fluid flush.
+                                </p>
+                            </div>
+                            
+                            <div class="service-card">
+                                <img src="./assets/images/services/battery-repair.jpg" alt="Battery Service" class="service-icon">
+                                <h3 class="service-title">Battery Service</h3>
+                                <p class="service-description">
+                                    Battery testing, replacement, and charging system diagnostics. 
+                                    We handle proper disposal of old batteries.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <div id="contact-page" class="page">
+                <div class="center-container">
+                    <section class="contact-section">
+                        <h2>Contact Us</h2>
+                        <form id="contactForm">
+                            <label for="contact-name">Your Name</label>
+                            <input type="text" id="contact-name" required placeholder="Your name">
+                            
+                            <label for="contact-email">Email</label>
+                            <input type="email" id="contact-email" required placeholder="Your email">
+                            
+                            <label for="contact-phone">Phone Number</label>
+                            <input type="tel" id="contact-phone" placeholder="Your phone number">
+                            
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" required placeholder="Subject">
+                            
+                            <label for="message">Message</label>
+                            <textarea id="message" required placeholder="Your message"></textarea>
+                            
+                            <button type="submit">Send Message</button>
+                        </form>
+                        
+                        <div id="contactConfirmation">
+                            <h3>Message Sent!</h3>
+                            <p>Thank you for contacting Makati Garage. We'll get back to you soon.</p>
+                        </div>
+
+                        <div class="social-media">
+                            <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="https://twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="https://wa.me/97312345678" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                            <a href="tel:+97312345678" aria-label="Phone"><i class="fas fa-phone"></i></a>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 1.5rem;">
+                            <p><i class="fas fa-map-marker-alt"></i> Sitra, Bahrain</p>
+                            <p><i class="fas fa-clock"></i> Open 7 Days a Week: 8AM - 10PM</p>
+                            <p><i class="fas fa-phone"></i> +973 1234 5678</p>
+                            <p><i class="fas fa-envelope"></i> info@makatigarage.com</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2025 Makati Garage. All rights reserved.</p>
+            <div class="social-media" style="margin: 0.5rem 0;">
+                <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            </div>
+        </footer>
+    </div>
+
+<script src="./assets/js/script.js"></script>
+</body>
+</html>
+
